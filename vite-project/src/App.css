@@ -1,0 +1,21 @@
+body {
+    display: grid;
+    height: 100vh;
+    place-items: center;
+    position: relative;
+}
+
+.page-1-container {
+    width: 60vw;
+    text-align: center;
+}
+
+.page-2-container {
+    
+}
+
+.back-btn {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+}
