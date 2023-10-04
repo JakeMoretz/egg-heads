@@ -10,8 +10,17 @@ body {
     text-align: center;
 }
 
-.page-2-container {
-    
+.answer-btn {
+    background-color: aliceblue;
+    border: 1px solid black
+}
+
+.selected-btn {
+    background-color: rgb(85, 242, 242);
+}
+
+.correct-answer {
+    background-color: rgb(173, 247, 173);
 }
 
 .back-btn {

@@ -1,47 +1,59 @@
 import './App.css';
 import React from 'react';
 import Quiz from './components/Quiz';
+import { nanoid } from 'nanoid';
 
 export default function App() {
     const [page2, setPage2] = React.useState(false);
-    const [triviaData, setTriviaData] = React.useState({});
     const [questions, setQuestions] = React.useState([]);
-    const [shuffledOptions, setShuffledOptions] = React.useState([]);
+    const [correctAnswers, setCorrectAnswers] = React.useState([]);
+    const [showNewButton, setShowNewButton] = React.useState(true);
 
-    // get all questions to display
-    // React.useEffect(() => {
-    //     fetch('https://opentdb.com/api.php?amount=5')
-    //       .then((res) => res.json())
-    //       .then((data) => {
-    //         const fetchedQuestions = data.results.map((question) => question.question);
-    //         setQuestions(fetchedQuestions);
-    //       })
-    //       .catch(error => console.error('Error fetching questions:', error));
-    //   }, []);
-
-   
-    
-    React.useEffect(() => {
-        fetch('https://opentdb.com/api.php?amount=5')
-          .then((res) => res.json())
-          .then((data) => {
-            setQuestions(data.results);
-            // Shuffle answer options whenever questions change
-            const allOptions = [...data.results[0].incorrect_answers, data.results[0].correct_answer];
-            const shuffledOptions = shuffleOptions(allOptions);
-            setShuffledOptions(shuffledOptions);
-          })
-          .catch(error => console.error('Error fetching questions:', error));
-      }, []);
-    
-      const shuffleOptions = (options) => {
+    const shuffleOptions = (options) => {
         for (let i = options.length - 1; i > 0; i--) {
-          const j = Math.floor(Math.random() * (i + 1));
-          [options[i], options[j]] = [options[j], options[i]];
+            const j = Math.floor(Math.random() * (i + 1));
+            [options[i], options[j]] = [options[j], options[i]];
         }
         return options;
-      };
-    
+    };
+
+    React.useEffect(() => {
+        fetch('https://opentdb.com/api.php?amount=5')
+            .then((res) => res.json())
+            .then((data) => {
+                // Shuffle options for each question separately
+                const shuffledQuestions = data.results.map((question) => {
+                    const allOptions = [
+                        ...question.incorrect_answers,
+                        question.correct_answer,
+                    ];
+                    const shuffledOptions = shuffleOptions(allOptions);
+                    return {
+                        ...question,
+                        id: nanoid(),
+                        answers: shuffledOptions,
+                    };
+                });
+                setQuestions(shuffledQuestions);
+            })
+            .catch((error) =>
+                console.error('Error fetching questions:', error)
+            );
+    }, []);
+
+    React.useEffect(() => {
+        console.log(correctAnswers); 
+    }, [correctAnswers]);
+
+    function checkAnswers() {
+        const correct = questions.map((question) => question.correct_answer);
+        setCorrectAnswers(correct);
+        setShowNewButton(false);
+    }
+
+    function resetQuiz() {
+        setShowNewButton(false);
+    }
 
     function turnPage() {
         setPage2((prevState) => !prevState);
@@ -50,15 +62,25 @@ export default function App() {
     return (
         <main>
             {page2 ? (
-                questions.map((question, index) => (
-                    <Quiz
-                        key={index}
-                        turnPage={turnPage}
-                        triviaData={triviaData}
-                        question={question}
-                        answers = {shuffledOptions}
-                    />
-                ))
+                <div>
+                    {questions.map((question, index) => (
+                        <Quiz
+                            key={index}
+                            turnPage={turnPage}
+                            question={question.question}
+                            answers={question.answers}
+                            correctAnswers={correctAnswers}
+                        />
+                    ))}
+
+                    {showNewButton && (
+                        <button onClick={checkAnswers}>Check Answers</button>
+                    )}
+                    {!showNewButton && <div>Answers checked!</div>}
+                    {!showNewButton && (
+                        <button onClick={resetQuiz}>New Questions</button>
+                    )}
+                </div>
             ) : (
                 <section className="page-1-container">
                     <h1 className="title">Egg Heads</h1>
