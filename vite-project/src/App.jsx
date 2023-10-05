@@ -2,12 +2,17 @@ import './App.css';
 import React from 'react';
 import Quiz from './components/Quiz';
 import { nanoid } from 'nanoid';
+import he from 'he';
 
 export default function App() {
     const [page2, setPage2] = React.useState(false);
     const [questions, setQuestions] = React.useState([]);
     const [correctAnswers, setCorrectAnswers] = React.useState([]);
     const [showNewButton, setShowNewButton] = React.useState(true);
+    
+   
+    
+    
 
     const shuffleOptions = (options) => {
         for (let i = options.length - 1; i > 0; i--) {
@@ -15,7 +20,9 @@ export default function App() {
             [options[i], options[j]] = [options[j], options[i]];
         }
         return options;
-    };
+  };
+
+
 
     React.useEffect(() => {
         fetch('https://opentdb.com/api.php?amount=5')
@@ -41,19 +48,51 @@ export default function App() {
             );
     }, []);
 
+
+  
+
+
     React.useEffect(() => {
+       
         console.log(correctAnswers); 
     }, [correctAnswers]);
 
     function checkAnswers() {
-        const correct = questions.map((question) => question.correct_answer);
-        setCorrectAnswers(correct);
-        setShowNewButton(false);
+        
+            const correct = questions.map((question) => question.correct_answer);
+            setCorrectAnswers(correct);
+            setShowNewButton(false);
+       
+       
     }
 
-    function resetQuiz() {
-        setShowNewButton(false);
-    }
+    
+
+   
+    const handleReloadQuiz = () => {
+        fetch('https://opentdb.com/api.php?amount=5')
+            .then((res) => res.json())
+            .then((data) => {
+                // Shuffle options for each question separately
+                const shuffledQuestions = data.results.map((question) => {
+                    const allOptions = [
+                        ...question.incorrect_answers,
+                        question.correct_answer,
+                    ];
+                    const shuffledOptions = shuffleOptions(allOptions);
+                    return {
+                        ...question,
+                        id: nanoid(),
+                        answers: shuffledOptions,
+                    };
+                });
+                setQuestions(shuffledQuestions);
+            })
+            .catch((error) =>
+                console.error('Error fetching questions:', error)
+            );
+        }
+   
 
     function turnPage() {
         setPage2((prevState) => !prevState);
@@ -70,6 +109,10 @@ export default function App() {
                             question={question.question}
                             answers={question.answers}
                             correctAnswers={correctAnswers}
+                            // holdAnswer={holdAnswer}
+                            // selectedButton={selectedButton}
+                           
+                            
                         />
                     ))}
 
@@ -78,7 +121,7 @@ export default function App() {
                     )}
                     {!showNewButton && <div>Answers checked!</div>}
                     {!showNewButton && (
-                        <button onClick={resetQuiz}>New Questions</button>
+                        <button onClick={handleReloadQuiz}>New Questions</button>
                     )}
                 </div>
             ) : (
