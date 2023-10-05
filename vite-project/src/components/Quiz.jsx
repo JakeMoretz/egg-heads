@@ -7,17 +7,11 @@ export default function Quiz(props) {
     const [selectedButton, setSelectedButton] = React.useState(null);
 
     React.useEffect(() => {
-        // Reset selectedButton when new questions are received
         setSelectedButton(null);
     }, [props.question]);
 
-   
-  
     const decodedQuestions = he.decode(props.question);
-    // const decodedAnswers = he.decode(props.answers)
-
-
-  
+    const decodedAnswers = props.answers.map((answer) => he.decode(answer));
 
     function holdAnswer(index) {
         setSelectedButton(index);
@@ -30,7 +24,7 @@ export default function Quiz(props) {
             </button>
             <h3>{decodedQuestions}</h3>
             <div className="answer-options">
-                {props.answers.map((answer, index) => {
+                {decodedAnswers.map((answer, index) => {
                     const isSelected = selectedButton === index;
                     const isCorrect = props.correctAnswers.includes(answer);
 
