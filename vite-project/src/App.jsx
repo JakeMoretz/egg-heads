@@ -36,6 +36,7 @@ export default function App() {
                     };
                 });
                 setQuestions(shuffledQuestions);
+                
             })
             .catch((error) =>
                 console.error('Error fetching questions:', error)
@@ -44,7 +45,8 @@ export default function App() {
 
     React.useEffect(() => {
         console.log(correctAnswers);
-    }, [correctAnswers]);
+        console.log(questions)
+    }, [correctAnswers, questions]);
 
     function checkAnswers() {
         const correct = questions.map((question) => question.correct_answer);
