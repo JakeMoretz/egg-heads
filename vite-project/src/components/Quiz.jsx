@@ -18,11 +18,19 @@ export default function Quiz(props) {
     }
 
     return (
+
+
+      
+        
         <section className="page-2-container">
-            <button onClick={props.turnPage} className="back-btn">
-                Back
-            </button>
-            <h3>{decodedQuestions}</h3>
+
+         
+               
+            <div className="all-questions">
+            
+              
+            
+            <h3 className="questions">{decodedQuestions}</h3>
             <div className="answer-options">
                 {decodedAnswers.map((answer, index) => {
                     const isSelected = selectedButton === index;
@@ -45,6 +53,9 @@ export default function Quiz(props) {
                     );
                 })}
             </div>
+
+            </div>
         </section>
+      
     );
 }

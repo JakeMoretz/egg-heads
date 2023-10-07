@@ -2,7 +2,7 @@ import './App.css';
 import React from 'react';
 import Quiz from './components/Quiz';
 import { nanoid } from 'nanoid';
-import he from 'he';
+
 
 export default function App() {
     const [page2, setPage2] = React.useState(false);
@@ -87,6 +87,12 @@ export default function App() {
         <main>
             {page2 ? (
                 <div>
+                    <div className="top-section">
+                        <button onClick={turnPage} className="back-btn">
+                        Back 
+                        </button>
+                        <p className="page-2-title">egg Heads</p>                      
+                    </div>
                     {questions.map((question, index) => (
                         <Quiz
                             key={index}
@@ -96,16 +102,17 @@ export default function App() {
                             correctAnswers={correctAnswers}
                         />
                     ))}
-
+                   <div className="checked-question-container">
                     {showNewButton && (
-                        <button onClick={checkAnswers}>Check Answers</button>
+                        <button onClick={checkAnswers} className="new-question">Check Answers</button>
                     )}
-                    {!showNewButton && <div>Answers checked!</div>}
+                    {!showNewButton && <div className='checked-answers'>Answers checked!</div>}
                     {!showNewButton && (
-                        <button onClick={handleReloadQuiz}>
+                        <button onClick={handleReloadQuiz} className="new-question">
                             New Questions
                         </button>
                     )}
+                    </div>
                 </div>
             ) : (
                 <section className="page-1-container">
