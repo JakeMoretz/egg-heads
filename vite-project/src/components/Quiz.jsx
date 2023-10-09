@@ -18,44 +18,32 @@ export default function Quiz(props) {
     }
 
     return (
-
-
-      
-        
         <section className="page-2-container">
-
-         
-               
             <div className="all-questions">
-            
-              
-            
-            <h3 className="questions">{decodedQuestions}</h3>
-            <div className="answer-options">
-                {decodedAnswers.map((answer, index) => {
-                    const isSelected = selectedButton === index;
-                    const isCorrect = props.correctAnswers.includes(answer);
+                <h3 className="questions">{decodedQuestions}</h3>
+                <div className="answer-options">
+                    {decodedAnswers.map((answer, index) => {
+                        const isSelected = selectedButton === index;
+                        const isCorrect = props.correctAnswers.includes(answer);
 
-                    const buttonClassNames = classnames({
-                        'answer-btn': true,
-                        'selected-btn': isSelected,
-                        'correct-answer': isCorrect,
-                    });
+                        const buttonClassNames = classnames({
+                            'answer-btn': true,
+                            'selected-btn': isSelected,
+                            'correct-answer': isCorrect,
+                        });
 
-                    return (
-                        <button
-                            key={index}
-                            className={buttonClassNames}
-                            onClick={() => holdAnswer(index)}
-                        >
-                            {answer}
-                        </button>
-                    );
-                })}
-            </div>
-
+                        return (
+                            <button
+                                key={index}
+                                className={buttonClassNames}
+                                onClick={() => holdAnswer(index)}
+                            >
+                                {answer}
+                            </button>
+                        );
+                    })}
+                </div>
             </div>
         </section>
-      
     );
 }

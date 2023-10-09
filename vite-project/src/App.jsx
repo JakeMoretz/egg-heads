@@ -3,7 +3,6 @@ import React from 'react';
 import Quiz from './components/Quiz';
 import { nanoid } from 'nanoid';
 
-
 export default function App() {
     const [page2, setPage2] = React.useState(false);
     const [questions, setQuestions] = React.useState([]);
@@ -19,7 +18,7 @@ export default function App() {
     };
 
     React.useEffect(() => {
-        setCorrectAnswers([])
+        setCorrectAnswers([]);
         fetch('https://opentdb.com/api.php?amount=5')
             .then((res) => res.json())
             .then((data) => {
@@ -36,7 +35,6 @@ export default function App() {
                     };
                 });
                 setQuestions(shuffledQuestions);
-                
             })
             .catch((error) =>
                 console.error('Error fetching questions:', error)
@@ -45,7 +43,7 @@ export default function App() {
 
     React.useEffect(() => {
         console.log(correctAnswers);
-        console.log(questions)
+        console.log(questions);
     }, [correctAnswers, questions]);
 
     function checkAnswers() {
@@ -71,7 +69,7 @@ export default function App() {
                     };
                 });
                 setQuestions(shuffledQuestions);
-                setCorrectAnswers([])
+                setCorrectAnswers([]);
                 setShowNewButton(true);
             })
             .catch((error) =>
@@ -89,9 +87,9 @@ export default function App() {
                 <div>
                     <div className="top-section">
                         <button onClick={turnPage} className="back-btn">
-                        Back 
+                            Back
                         </button>
-                        <p className="page-2-title">egg Heads</p>                      
+                        <p className="page-2-title">egg Heads</p>
                     </div>
                     {questions.map((question, index) => (
                         <Quiz
@@ -102,16 +100,28 @@ export default function App() {
                             correctAnswers={correctAnswers}
                         />
                     ))}
-                   <div className="checked-question-container">
-                    {showNewButton && (
-                        <button onClick={checkAnswers} className="new-question">Check Answers</button>
-                    )}
-                    {!showNewButton && <div className='checked-answers'>Answers checked!</div>}
-                    {!showNewButton && (
-                        <button onClick={handleReloadQuiz} className="new-question">
-                            New Questions
-                        </button>
-                    )}
+                    <div className="checked-question-container">
+                        {showNewButton && (
+                            <button
+                                onClick={checkAnswers}
+                                className="new-question check-answers"
+                            >
+                                Check Answers
+                            </button>
+                        )}
+                        {!showNewButton && (
+                            <div className="checked-answers">
+                                Answers checked!
+                            </div>
+                        )}
+                        {!showNewButton && (
+                            <button
+                                onClick={handleReloadQuiz}
+                                className="new-question"
+                            >
+                                New Questions
+                            </button>
+                        )}
                     </div>
                 </div>
             ) : (
